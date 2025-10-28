@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> OctoPulse Conway's Game of Life</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>OctoPulse Conway's Game of Life</title>
+    <link rel="stylesheet" href="Styles.css">
+    <!-- Add Octicons for GitHub icons -->
+    <link rel="stylesheet" href="https://unpkg.com/@primer/octicons@latest/build/build.css">
 </head>
 <body>
+    <!-- GitHub-style header bar -->
+    <header class="gh-header">
+        <span class="octicon octicon-mark-github" aria-label="GitHub Logo"></span>
+        <span>OctoPulse <small style="font-weight:400;opacity:0.7;padding-left:0.5em;">GitHub Themed</small></span>
+    </header>
     <div id="container">
         <div id="controls">
-            <button id="playPause">Play</button>
-            <button id="step" class="secondary">Step</button>
-            <button id="clear" class="secondary">Clear</button>
-            <button id="random" class="secondary">Random</button>
+            <button id="playPause"><span class="octicon octicon-play"></span> Play</button>
+            <button id="step" class="secondary"><span class="octicon octicon-arrow-right"></span> Step</button>
+            <button id="clear" class="secondary"><span class="octicon octicon-x"></span> Clear</button>
+            <button id="random" class="secondary"><span class="octicon octicon-zap"></span> Random</button>
             <label>
                 Speed:
                 <input type="range" id="speed" min="1" max="60" value="2">
