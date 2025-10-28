@@ -90,8 +90,8 @@
             <button id="random" class="secondary">Random</button>
             <label>
                 Speed:
-                <input type="range" id="speed" min="1" max="60" value="10">
-                <span id="speedValue">10</span>
+                <input type="range" id="speed" min="1" max="60" value="2">
+                <span id="speedValue">2</span>
             </label>
         </div>
         <canvas id="canvas"></canvas>
@@ -109,12 +109,12 @@
         
         const CELL_SIZE = 10;
         const CELL_RADIUS = 2;
-        const ALIVE_COLOR = '#1f2937';
+        const COLORS = ['#9be9a8', '#40c463', '#30a14e', '#216e39'];
         
         let cols, rows;
         let grid = [];
         let isPlaying = false;
-        let speed = 10;
+        let speed = 2;
         let lastUpdate = 0;
         
         function resizeCanvas() {
@@ -140,7 +140,7 @@
         }
         
         function createEmptyGrid() {
-            return Array(rows).fill(null).map(() => Array(cols).fill(false));
+            return Array(rows).fill(null).map(() => Array(cols).fill(0));
         }
         
         function countNeighbors(row, col) {
@@ -164,10 +164,10 @@
                     const neighbors = countNeighbors(i, j);
                     const cell = grid[i][j];
                     
-                    if (cell && (neighbors === 2 || neighbors === 3)) {
-                        newGrid[i][j] = true;
-                    } else if (!cell && neighbors === 3) {
-                        newGrid[i][j] = true;
+                    if (cell > 0 && (neighbors === 2 || neighbors === 3)) {
+                        newGrid[i][j] = neighbors;
+                    } else if (cell === 0 && neighbors === 3) {
+                        newGrid[i][j] = neighbors;
                     }
                 }
             }
@@ -194,10 +194,11 @@
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            ctx.fillStyle = ALIVE_COLOR;
             for (let i = 0; i < rows; i++) {
                 for (let j = 0; j < cols; j++) {
-                    if (grid[i][j]) {
+                    if (grid[i][j] > 0) {
+                        const colorIndex = Math.min(grid[i][j] - 1, COLORS.length - 1);
+                        ctx.fillStyle = COLORS[colorIndex];
                         drawRoundedRect(
                             j * CELL_SIZE,
                             i * CELL_SIZE,
@@ -241,7 +242,7 @@
             grid = createEmptyGrid();
             for (let i = 0; i < rows; i++) {
                 for (let j = 0; j < cols; j++) {
-                    grid[i][j] = Math.random() > 0.7;
+                    grid[i][j] = Math.random() > 0.7 ? 3 : 0;
                 }
             }
             draw();
@@ -260,7 +261,7 @@
             const row = Math.floor(y / CELL_SIZE);
             
             if (row >= 0 && row < rows && col >= 0 && col < cols) {
-                grid[row][col] = !grid[row][col];
+                grid[row][col] = grid[row][col] > 0 ? 0 : 3;
                 draw();
             }
         });
