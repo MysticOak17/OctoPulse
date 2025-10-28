@@ -1,0 +1,172 @@
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const playPauseBtn = document.getElementById('playPause');
+const stepBtn = document.getElementById('step');
+const clearBtn = document.getElementById('clear');
+const randomBtn = document.getElementById('random');
+const speedSlider = document.getElementById('speed');
+const speedValue = document.getElementById('speedValue');
+
+const CELL_SIZE = 10;
+const CELL_RADIUS = 2;
+const COLORS = ['#9be9a8', '#40c463', '#30a14e', '#216e39'];
+
+let cols, rows;
+let grid = [];
+let isPlaying = false;
+let speed = 2;
+let lastUpdate = 0;
+
+function resizeCanvas() {
+    const controlsHeight = document.getElementById('controls').offsetHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - controlsHeight;
+    
+    cols = Math.floor(canvas.width / CELL_SIZE);
+    rows = Math.floor(canvas.height / CELL_SIZE);
+    
+    const oldGrid = grid;
+    grid = createEmptyGrid();
+    
+    if (oldGrid.length > 0) {
+        for (let i = 0; i < Math.min(rows, oldGrid.length); i++) {
+            for (let j = 0; j < Math.min(cols, oldGrid[0].length); j++) {
+                grid[i][j] = oldGrid[i][j];
+            }
+        }
+    }
+    
+    draw();
+}
+
+function createEmptyGrid() {
+    return Array(rows).fill(null).map(() => Array(cols).fill(0));
+}
+
+function countNeighbors(row, col) {
+    let count = 0;
+    for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+            if (i === 0 && j === 0) continue;
+            const newRow = (row + i + rows) % rows;
+            const newCol = (col + j + cols) % cols;
+            if (grid[newRow][newCol] > 0) count++;
+        }
+    }
+    return count;
+}
+
+function nextGeneration() {
+    const newGrid = createEmptyGrid();
+    
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            const neighbors = countNeighbors(i, j);
+            const cell = grid[i][j];
+            
+            if (cell > 0 && (neighbors === 2 || neighbors === 3)) {
+                newGrid[i][j] = neighbors;
+            } else if (cell === 0 && neighbors === 3) {
+                newGrid[i][j] = neighbors;
+            }
+        }
+    }
+    
+    grid = newGrid;
+}
+
+function drawRoundedRect(x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.arcTo(x + width, y, x + width, y + radius, radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+    ctx.lineTo(x + radius, y + height);
+    ctx.arcTo(x, y + height, x, y + height - radius, radius);
+    ctx.lineTo(x, y + radius);
+    ctx.arcTo(x, y, x + radius, y, radius);
+    ctx.closePath();
+    ctx.fill();
+}
+
+function draw() {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (grid[i][j] > 0) {
+                const colorIndex = Math.min(grid[i][j] - 1, COLORS.length - 1);
+                ctx.fillStyle = COLORS[colorIndex];
+                drawRoundedRect(
+                    j * CELL_SIZE,
+                    i * CELL_SIZE,
+                    CELL_SIZE,
+                    CELL_SIZE,
+                    CELL_RADIUS
+                );
+            }
+        }
+    }
+}
+
+function animate(timestamp) {
+    if (isPlaying) {
+        const interval = 1000 / speed;
+        if (timestamp - lastUpdate >= interval) {
+            nextGeneration();
+            draw();
+            lastUpdate = timestamp;
+        }
+    }
+    requestAnimationFrame(animate);
+}
+
+playPauseBtn.addEventListener('click', () => {
+    isPlaying = !isPlaying;
+    playPauseBtn.textContent = isPlaying ? 'Pause' : 'Play';
+});
+
+stepBtn.addEventListener('click', () => {
+    nextGeneration();
+    draw();
+});
+
+clearBtn.addEventListener('click', () => {
+    grid = createEmptyGrid();
+    draw();
+});
+
+randomBtn.addEventListener('click', () => {
+    grid = createEmptyGrid();
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            grid[i][j] = Math.random() > 0.7 ? 3 : 0;
+        }
+    }
+    draw();
+});
+
+speedSlider.addEventListener('input', (e) => {
+    speed = parseInt(e.target.value);
+    speedValue.textContent = speed;
+});
+
+canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const col = Math.floor(x / CELL_SIZE);
+    const row = Math.floor(y / CELL_SIZE);
+    
+    if (row >= 0 && row < rows && col >= 0 && col < cols) {
+        grid[row][col] = grid[row][col] > 0 ? 0 : 3;
+        draw();
+    }
+});
+
+window.addEventListener('resize', resizeCanvas);
+
+resizeCanvas();
+requestAnimationFrame(animate);
