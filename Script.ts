@@ -1,33 +1,38 @@
 // ========================================
 // Constants
 // ========================================
-const CELL_SIZE = 10;
-const CELL_RADIUS = 2;
-const GITHUB_COLORS = ['#9be9a8', '#40c463', '#30a14e', '#216e39'];
-const DEFAULT_SPEED = 2; // generations per second
-const RANDOM_DENSITY = 0.3; // 30% of cells will be alive
+const CELL_SIZE: number = 10;
+const CELL_RADIUS: number = 2;
+const GITHUB_COLORS: string[] = ['#9be9a8', '#40c463', '#30a14e', '#216e39'];
+const DEFAULT_SPEED: number = 2; // generations per second
+const RANDOM_DENSITY: number = 0.3; // 30% of cells will be alive
 
 // ========================================
 // DOM Elements
 // ========================================
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const playPauseBtn = document.getElementById('playPause');
-const stepBtn = document.getElementById('step');
-const clearBtn = document.getElementById('clear');
-const randomBtn = document.getElementById('random');
-const speedSlider = document.getElementById('speed');
-const speedValue = document.getElementById('speedValue');
+const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+const playPauseBtn = document.getElementById('playPause') as HTMLButtonElement;
+const stepBtn = document.getElementById('step') as HTMLButtonElement;
+const clearBtn = document.getElementById('clear') as HTMLButtonElement;
+const randomBtn = document.getElementById('random') as HTMLButtonElement;
+const speedSlider = document.getElementById('speed') as HTMLInputElement;
+const speedValue = document.getElementById('speedValue') as HTMLSpanElement;
+
+// ========================================
+// Types
+// ========================================
+type Grid = number[][];
 
 // ========================================
 // State
 // ========================================
-let cols = 0;
-let rows = 0;
-let grid = [];
-let isPlaying = false;
-let speed = DEFAULT_SPEED;
-let lastUpdate = 0;
+let cols: number = 0;
+let rows: number = 0;
+let grid: Grid = [];
+let isPlaying: boolean = false;
+let speed: number = DEFAULT_SPEED;
+let lastUpdate: number = 0;
 
 // ========================================
 // Grid Management
@@ -35,9 +40,9 @@ let lastUpdate = 0;
 
 /**
  * Creates an empty grid filled with zeros (dead cells)
- * @returns {number[][]} 2D array representing the grid
+ * @returns {Grid} 2D array representing the grid
  */
-function createEmptyGrid() {
+function createEmptyGrid(): Grid {
     return Array(rows).fill(null).map(() => Array(cols).fill(0));
 }
 
@@ -48,8 +53,8 @@ function createEmptyGrid() {
  * @param {number} col - Column index of the cell
  * @returns {number} Count of alive neighbors (0-8)
  */
-function countNeighbors(row, col) {
-    let count = 0;
+function countNeighbors(row: number, col: number): number {
+    let count: number = 0;
     
     for (let i = -1; i <= 1; i++) {
         for (let j = -1; j <= 1; j++) {
@@ -57,8 +62,8 @@ function countNeighbors(row, col) {
             if (i === 0 && j === 0) continue;
             
             // Wrap around edges (toroidal topology)
-            const neighborRow = (row + i + rows) % rows;
-            const neighborCol = (col + j + cols) % cols;
+            const neighborRow: number = (row + i + rows) % rows;
+            const neighborCol: number = (col + j + cols) % cols;
             
             if (grid[neighborRow][neighborCol] > 0) {
                 count++;
@@ -76,13 +81,13 @@ function countNeighbors(row, col) {
  * - All other cells die or stay dead
  * The cell's value represents its neighbor count for color coding
  */
-function computeNextGeneration() {
-    const newGrid = createEmptyGrid();
+function computeNextGeneration(): void {
+    const newGrid: Grid = createEmptyGrid();
     
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            const neighbors = countNeighbors(i, j);
-            const isAlive = grid[i][j] > 0;
+            const neighbors: number = countNeighbors(i, j);
+            const isAlive: boolean = grid[i][j] > 0;
             
             // Conway's Game of Life rules
             if (isAlive && (neighbors === 2 || neighbors === 3)) {
@@ -99,7 +104,7 @@ function computeNextGeneration() {
 /**
  * Populates the grid with random alive cells
  */
-function randomizeGrid() {
+function randomizeGrid(): void {
     grid = createEmptyGrid();
     
     for (let i = 0; i < rows; i++) {
@@ -115,7 +120,7 @@ function randomizeGrid() {
  * @param {number} row - Row index
  * @param {number} col - Column index
  */
-function toggleCell(row, col) {
+function toggleCell(row: number, col: number): void {
     if (row >= 0 && row < rows && col >= 0 && col < cols) {
         grid[row][col] = grid[row][col] > 0 ? 0 : 3;
     }
@@ -129,16 +134,16 @@ function toggleCell(row, col) {
  * Resizes the canvas to fill the available space
  * Preserves existing grid data when resizing
  */
-function resizeCanvas() {
-    const controlsHeight = document.getElementById('controls').offsetHeight;
+function resizeCanvas(): void {
+    const controlsHeight: number = document.getElementById('controls')!.offsetHeight;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - controlsHeight;
     
-    const newCols = Math.floor(canvas.width / CELL_SIZE);
-    const newRows = Math.floor(canvas.height / CELL_SIZE);
+    const newCols: number = Math.floor(canvas.width / CELL_SIZE);
+    const newRows: number = Math.floor(canvas.height / CELL_SIZE);
     
     // Preserve existing grid data
-    const oldGrid = grid;
+    const oldGrid: Grid = grid;
     cols = newCols;
     rows = newRows;
     grid = createEmptyGrid();
@@ -163,7 +168,13 @@ function resizeCanvas() {
  * @param {number} height - Height of rectangle
  * @param {number} radius - Corner radius
  */
-function drawRoundedRect(x, y, width, height, radius) {
+function drawRoundedRect(
+    x: number, 
+    y: number, 
+    width: number, 
+    height: number, 
+    radius: number
+): void {
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + width - radius, y);
@@ -183,23 +194,23 @@ function drawRoundedRect(x, y, width, height, radius) {
  * @param {number} neighborCount - Number of neighbors (1-4+)
  * @returns {string} Hex color code
  */
-function getColorForNeighborCount(neighborCount) {
-    const colorIndex = Math.min(neighborCount - 1, GITHUB_COLORS.length - 1);
+function getColorForNeighborCount(neighborCount: number): string {
+    const colorIndex: number = Math.min(neighborCount - 1, GITHUB_COLORS.length - 1);
     return GITHUB_COLORS[colorIndex];
 }
 
 /**
  * Renders the entire grid to the canvas
  */
-function draw() {
-    // Clear canvas with white background
-    ctx.fillStyle = 'white';
+function draw(): void {
+    // Clear canvas with black background
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     // Draw all alive cells
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            const cellValue = grid[i][j];
+            const cellValue: number = grid[i][j];
             
             if (cellValue > 0) {
                 ctx.fillStyle = getColorForNeighborCount(cellValue);
@@ -224,9 +235,9 @@ function draw() {
  * Updates the simulation at the specified speed when playing
  * @param {number} timestamp - Current timestamp from requestAnimationFrame
  */
-function animate(timestamp) {
+function animate(timestamp: number): void {
     if (isPlaying) {
-        const interval = 1000 / speed;
+        const interval: number = 1000 / speed;
         
         if (timestamp - lastUpdate >= interval) {
             computeNextGeneration();
@@ -245,7 +256,7 @@ function animate(timestamp) {
 /**
  * Toggles between play and pause states
  */
-function handlePlayPause() {
+function handlePlayPause(): void {
     isPlaying = !isPlaying;
     playPauseBtn.textContent = isPlaying ? 'Pause' : 'Play';
 }
@@ -253,7 +264,7 @@ function handlePlayPause() {
 /**
  * Advances the simulation by one generation
  */
-function handleStep() {
+function handleStep(): void {
     computeNextGeneration();
     draw();
 }
@@ -261,7 +272,7 @@ function handleStep() {
 /**
  * Clears the entire grid
  */
-function handleClear() {
+function handleClear(): void {
     grid = createEmptyGrid();
     draw();
 }
@@ -269,7 +280,7 @@ function handleClear() {
 /**
  * Generates a random pattern on the grid
  */
-function handleRandom() {
+function handleRandom(): void {
     randomizeGrid();
     draw();
 }
@@ -278,22 +289,23 @@ function handleRandom() {
  * Updates the simulation speed
  * @param {Event} event - Input event from speed slider
  */
-function handleSpeedChange(event) {
-    speed = parseInt(event.target.value);
-    speedValue.textContent = speed;
+function handleSpeedChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    speed = parseInt(target.value);
+    speedValue.textContent = speed.toString();
 }
 
 /**
  * Handles canvas clicks to toggle cells
  * @param {MouseEvent} event - Mouse click event
  */
-function handleCanvasClick(event) {
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+function handleCanvasClick(event: MouseEvent): void {
+    const rect: DOMRect = canvas.getBoundingClientRect();
+    const x: number = event.clientX - rect.left;
+    const y: number = event.clientY - rect.top;
     
-    const col = Math.floor(x / CELL_SIZE);
-    const row = Math.floor(y / CELL_SIZE);
+    const col: number = Math.floor(x / CELL_SIZE);
+    const row: number = Math.floor(y / CELL_SIZE);
     
     toggleCell(row, col);
     draw();
