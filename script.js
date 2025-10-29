@@ -194,7 +194,6 @@ function getColorForNeighborCount(neighborCount) {
  * Renders the entire grid to the canvas
  */
 function draw() {
-  // Clear canvas with white background
   ctx.fillStyle = "#0d1117"; // use your desired background color
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -317,3 +316,4 @@ window.addEventListener("resize", resizeCanvas);
 // ========================================
 resizeCanvas();
 requestAnimationFrame(animate);
+
