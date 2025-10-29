@@ -16,7 +16,7 @@ This repository’s purpose is to provide an educational and visually appealing 
 
 ## Current Implementation
 
-- **Frontend:**  
+- **Frontend:**
   - `Index.html`: Main app markup, links styles and scripts.
   - `Styles.css`: All UI theming, including GitHub-like dark and light modes.
   - `Script.ts`: Conway's Game of Life logic, event handlers, and rendering.

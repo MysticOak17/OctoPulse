@@ -1,158 +1,158 @@
 /* GitHub-inspired color palette and components */
 :root {
-    --gh-bg: #f6f8fa;
-    --gh-header-bg: #24292e;
-    --gh-header-color: #fff;
-    --gh-accent: #0969da;
-    --gh-secondary: #6e7781;
-    --gh-border: #d0d7de;
+  --gh-bg: #f6f8fa;
+  --gh-header-bg: #24292e;
+  --gh-header-color: #fff;
+  --gh-accent: #0969da;
+  --gh-secondary: #6e7781;
+  --gh-border: #d0d7de;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background: var(--gh-bg);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    color: #24292e;
-    overflow: hidden;
+  background: var(--gh-bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #0d1117;
+  overflow: hidden;
 }
 
 /* GitHub-style header */
 .gh-header {
-    background: var(--gh-header-bg);
-    color: var(--gh-header-color);
-    padding: 0.7rem 2rem;
-    display: flex;
-    align-items: center;
-    font-size: 1.32rem;
-    font-weight: 600;
-    border-bottom: 1px solid var(--gh-border);
-    box-shadow: 0 1px 4px rgba(36,41,46,0.05);
-    gap: 1rem;
+  background: var(--gh-header-bg);
+  color: var(--gh-header-color);
+  padding: 0.7rem 2rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.32rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--gh-border);
+  box-shadow: 0 1px 4px rgba(36, 41, 46, 0.05);
+  gap: 1rem;
 }
 
 #container {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Controls bar styled like GitHub navigation */
 #controls {
-    padding: 12px 18px;
-    background: #fff;
-    border-bottom: 1px solid var(--gh-border);
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-    box-shadow: 0 2px 4px rgba(208,215,222,0.08);
+  padding: 12px 18px;
+  background: #fff;
+  border-bottom: 1px solid var(--gh-border);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 4px rgba(208, 215, 222, 0.08);
 }
 
 /* GitHub-style buttons */
 button {
-    padding: 8px 16px;
-    border: 1px solid var(--gh-border);
-    border-radius: 6px;
-    background: var(--gh-accent);
-    color: #fff;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: background 0.2s, filter 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-    outline: none;
-    box-shadow: 0 1px 0 rgba(27,31,35,0.04);
-} 
+  padding: 8px 16px;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  background: var(--gh-accent);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s, filter 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  outline: none;
+  box-shadow: 0 1px 0 rgba(27, 31, 35, 0.04);
+}
 button.secondary {
-    background: var(--gh-secondary);
+  background: var(--gh-secondary);
 }
 button:hover {
-    filter: brightness(0.93);
+  filter: brightness(0.93);
 }
 button:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
 
 /* Canvas area */
 #canvas {
-    flex: 1;
-    display: block;
-    cursor: crosshair;
-    background: #fff;
-    border-top: 1px solid var(--gh-border);
+  flex: 1;
+  display: block;
+  cursor: crosshair;
+  background: #0d1117;
+  border-top: 1px solid var(--gh-border);
 }
 
 /* Controls label */
 label {
-    font-size: 14px;
-    color: #57606a;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-} 
+  font-size: 14px;
+  color: #57606a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 input[type="range"] {
-    width: 100px;
+  width: 100px;
 }
 
 /* Responsive tweaks for small screens */
 @media (max-width: 600px) {
-    #controls {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-    }
-    .gh-header {
-        font-size: 1rem;
-        padding: 0.5rem 1rem;
-    }
+  #controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .gh-header {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
 }
 /* --- DARK MODE --- */
 @media (prefers-color-scheme: dark) {
-    :root {
-        --gh-bg: #0d1117;
-        --gh-header-bg: #161b22;
-        --gh-header-color: #c9d1d9;
-        --gh-accent: #238636;
-        --gh-secondary: #373e47;
-        --gh-border: #30363d;
-    }
-    body {
-        background: var(--gh-bg);
-        color: #c9d1d9;
-    }
-    .gh-header {
-        background: var(--gh-header-bg);
-        color: var(--gh-header-color);
-        border-bottom: 1px solid var(--gh-border);
-        box-shadow: 0 1px 4px rgba(22,27,34,0.10);
-    }
-    #controls {
-        background: #161b22;
-        border-bottom: 1px solid var(--gh-border);
-        box-shadow: 0 2px 4px rgba(22,27,34,0.10);
-    }
-    button {
-        background: var(--gh-accent);
-        color: #fff;
-        border: 1px solid var(--gh-border);
-        box-shadow: 0 1px 0 rgba(22,27,34,0.10);
-    }
-    button.secondary {
-        background: var(--gh-secondary);
-    }
-    #canvas {
-        background: #0d1117;
-        border-top: 1px solid var(--gh-border);
-    }
-    label {
-        color: #8b949e;
-    }
+  :root {
+    --gh-bg: #0d1117;
+    --gh-header-bg: #161b22;
+    --gh-header-color: #c9d1d9;
+    --gh-accent: #238636;
+    --gh-secondary: #373e47;
+    --gh-border: #30363d;
+  }
+  body {
+    background: var(--gh-bg);
+    color: #0d1117;
+  }
+  .gh-header {
+    background: var(--gh-header-bg);
+    color: var(--gh-header-color);
+    border-bottom: 1px solid var(--gh-border);
+    box-shadow: 0 1px 4px rgba(22, 27, 34, 0.1);
+  }
+  #controls {
+    background: #161b22;
+    border-bottom: 1px solid var(--gh-border);
+    box-shadow: 0 2px 4px rgba(22, 27, 34, 0.1);
+  }
+  button {
+    background: var(--gh-accent);
+    color: #fff;
+    border: 1px solid var(--gh-border);
+    box-shadow: 0 1px 0 rgba(22, 27, 34, 0.1);
+  }
+  button.secondary {
+    background: var(--gh-secondary);
+  }
+  #canvas {
+    background: #0d1117;
+    border-top: 1px solid var(--gh-border);
+  }
+  label {
+    color: #8b949e;
+  }
 }
