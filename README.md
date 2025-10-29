@@ -1,10 +1,10 @@
 # OctoPulse
 
-OctoPulse is a modern, GitHub-themed implementation of Conway’s Game of Life. Built with TypeScript, HTML, and CSS, it features a crisp UI inspired by GitHub’s design language—including a familiar header, Octicon icons, and adaptive dark mode.
+OctoPulse is a modern, GitHub-themed implementation of Conway’s Game of Life. Built with JavaScript, HTML, and CSS, it features a crisp UI inspired by GitHub’s design language—including a familiar header, Octicon icons, and adaptive dark mode.
 
 ## Purpose
 
-This repository’s purpose is to provide an educational and visually appealing version of Conway’s Game of Life. It serves as both a fun demo of interactive programming and a foundation for experimenting with UI/UX patterns, theming, and TypeScript application structure.
+This repository’s purpose is to provide an educational and visually appealing version of Conway’s Game of Life. It serves as both a fun demo of interactive programming and a foundation for experimenting with UI/UX patterns, theming, and JavaScript application structure.
 
 ## Features
 
@@ -12,14 +12,14 @@ This repository’s purpose is to provide an educational and visually appealing 
 - **Octicon integration:** Uses [GitHub Octicons](https://primer.style/octicons/) for clear, accessible icons.
 - **Adaptive Dark Mode:** Follows your system’s color scheme.
 - **Responsive Controls:** Play, pause, step, clear, randomize, and adjust speed.
-- **Clean TypeScript Source:** Main logic in `Script.ts` for readability and extensibility.
+- **Clean JavaScript Source:** Main logic in `script.js` for readability and extensibility.
 
 ## Current Implementation
 
 - **Frontend:**
-  - `Index.html`: Main app markup, links styles and scripts.
-  - `Styles.css`: All UI theming, including GitHub-like dark and light modes.
-  - `Script.ts`: Conway's Game of Life logic, event handlers, and rendering.
+  - `index.html`: Main app markup, links styles and scripts.
+  - `styles.css`: All UI theming, including GitHub-like dark and light modes.
+  - `script.js`: Conway's Game of Life logic, event handlers, and rendering.
 - **No backend required:** All logic runs client-side.
 
 ## Getting Started
@@ -44,7 +44,7 @@ Here’s how you can help:
    ```sh
    git checkout -b feature/my-cool-idea
    ```
-2. **Make your changes** in TypeScript, HTML, or CSS.
+2. **Make your changes** in JavaScript, HTML, or CSS.
 3. **Test locally** by opening `Index.html`.
 4. **Commit** and **push** your branch, then open a pull request.
 5. **Describe** your changes clearly so they can be reviewed.
